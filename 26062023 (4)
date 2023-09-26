@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Jogo Stop</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        #container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        #game {
+            display: none;
+        }
+        .category {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <div id="start">
+            <h1>Jogo Stop</h1>
+            <button onclick="startGame()">Iniciar Jogo</button>
+        </div>
+
+        <div id="game">
+            <h1>Jogo Stop</h1>
+            <p>Categoria: <span class="category" id="category"></span></p>
+            <input type="text" id="wordInput" placeholder="Digite uma palavra">
+            <button onclick="submitWord()">Enviar</button>
+            <p>Palavras Aceitas:</p>
+            <ul id="acceptedWords"></ul>
+            <button onclick="endGame()">Terminar Jogo</button>
+        </div>
+    </div>
+
+    <script>
+        const categories = ["Nome", "Cidade", "Animal", "Fruta", "Profissão", "Cor"];
+        let currentCategoryIndex = 0;
+        let acceptedWords = [];
+
+        function startGame() {
+            document.getElementById("start").style.display = "none";
+            document.getElementById("game").style.display = "block";
+            nextCategory();
+        }
+
+        function nextCategory() {
+            if (currentCategoryIndex < categories.length) {
+                document.getElementById("category").textContent = categories[currentCategoryIndex];
+                acceptedWords = [];
+                document.getElementById("acceptedWords").innerHTML = "";
+            } else {
+                alert("Fim do Jogo!");
+                endGame();
+            }
+        }
+
+        function submitWord() {
+            const wordInput = document.getElementById("wordInput");
+            const word = wordInput.value.trim();
+            if (word === "") {
+                alert("Digite uma palavra!");
+                return;
+            }
+            if (acceptedWords.includes(word)) {
+                alert("Essa palavra já foi aceita!");
+                return;
+            }
+            acceptedWords.push(word);
+            const wordList = document.getElementById("acceptedWords");
+            const listItem = document.createElement("li");
+            listItem.textContent = word;
+            wordList.appendChild(listItem);
+            wordInput.value = "";
+        }
+
+        function endGame() {
+            document.getElementById("game").style.display = "none";
+            document.getElementById("start").style.display = "block";
+            currentCategoryIndex = 0;
+        }
+    </script>
+<!-- Code injected by live-server -->
+<script>
+	// <![CDATA[  <-- For SVG support
+	if ('WebSocket' in window) {
+		(function () {
+			function refreshCSS() {
+				var sheets = [].slice.call(document.getElementsByTagName("link"));
+				var head = document.getElementsByTagName("head")[0];
+				for (var i = 0; i < sheets.length; ++i) {
+					var elem = sheets[i];
+					var parent = elem.parentElement || head;
+					parent.removeChild(elem);
+					var rel = elem.rel;
+					if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
+						var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
+						elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
+					}
+					parent.appendChild(elem);
+				}
+			}
+			var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
+			var address = protocol + window.location.host + window.location.pathname + '/ws';
+			var socket = new WebSocket(address);
+			socket.onmessage = function (msg) {
+				if (msg.data == 'reload') window.location.reload();
+				else if (msg.data == 'refreshcss') refreshCSS();
+			};
+			if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
+				console.log('Live reload enabled.');
+				sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
+			}
+		})();
+	}
+	else {
+		console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
+	}
+	// ]]>
+</script>
+</body>
+</html>
